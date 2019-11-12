@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# input is logfile, program name, input file
+
+valgrind --tool=memcheck ./$2 < $3 2> $1
+
+

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+gcc -Wall -o $2 ${2}.c 1> $1 2>> $1
+
+success=`grep -L -e "warning" -e "error" log`
+
+if [ "$success" = "${1}" ]; then
+    echo "Compilation succeeded"
+    exit 0
+else   
+    echo "Compile failed"
+    exit 1
+fi 
