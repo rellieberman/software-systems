@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#parameter $1 list of tests
+
+if [[ -d /.logFiles ]]; then 
+    echo ".logFiles dir exists, exiting"
+    exit 1
+else 
+    mkdir .logFiles
+    (( line_num = 1 ))
+    (( test_num = 0 ))
+    (( success_num = 0 ))
+    
+    IFS='@'
+    while read line; do
+        read -ra FIELDS <<< "$line"
+        
+        echo "${line_num}: ${FIELDS[0]}\n"
+        testCompilation "logFiles/${line_num}.compile.log" "$FIELDS[1]"
+        testInOut "logFiles/${line_num}.inout.log" "$FIELDS[1]" "$FIELDS[2]" "$FIELDS[3]"
+        testMemLeaks "logFiles/${line_num}.memory.log" "$FIELDS[1]" "$FIELDS[2]"
+        
+        (( line_num = line_num + 1 ))
+    done
+        
+        
+    
+        
+    
+fi

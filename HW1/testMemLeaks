@@ -2,6 +2,13 @@
 
 # input is logfile, program name, input file
 
-valgrind --tool=memcheck ./$2 < $3 2> $1
+error=$(valgrind --tool=memcheck --error-exitcode=1 ./$2 <$3 2>$1)
+
+if [ "${error}" = "1" ]; then 
+    echo "Memory test failed"
+    exit $error
+else
+    echo "Memory test passes"
+fi
 
 
