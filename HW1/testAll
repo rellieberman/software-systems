@@ -44,5 +44,7 @@ else
 
     done < $1
     
-    echo  $failed_num
+    test_num = (( $line_num - 1 ))
+    passed_num = (( $line_num - $failed_num ))
+    echo  "passed ${passed_num} of ${test_num} tests"
 #fi
