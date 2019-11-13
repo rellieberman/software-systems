@@ -2,7 +2,9 @@
 
 #parameter $1 list of tests
 
-if [[ -d /.logFiles ]]; then 
+DIR=$PWD
+
+if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
 else 
@@ -11,20 +13,21 @@ else
     (( test_num = 0 ))
     (( success_num = 0 ))
     
-    IFS='@'
     while read line; do
+        IFS='@'
         read -ra FIELDS <<< "$line"
         
-        echo "${line_num}: ${FIELDS[0]}\n"
-        testCompilation "logFiles/${line_num}.compile.log" "$FIELDS[1]"
-        testInOut "logFiles/${line_num}.inout.log" "$FIELDS[1]" "$FIELDS[2]" "$FIELDS[3]"
-        testMemLeaks "logFiles/${line_num}.memory.log" "$FIELDS[1]" "$FIELDS[2]"
+        echo "${line_num}: ${FIELDS[0]}"
+        echo "logFiles/${line_num}.compile.log ${FIELDS[1]}"
+        
+        # ./testCompilation "logFiles/${line_num}.compile.log $FIELDS[1]"
+        printf "logFiles/${line_num}.inout.log" "${FIELDS[1]} ${FIELDS[2]} ${FIELDS[3]}"
+        #./testInOut "logFiles/${line_num}.inout.log" "$FIELDS[1]" "$FIELDS[2]" "$FIELDS[3]"
+        # ./testMemLeaks "logFiles/${line_num}.memory.log" "$FIELDS[1]" "$FIELDS[2]"
+        printf   "logFiles/${line_num}.memory.log" "${FIELDS[1]} ${FIELDS[2]}"
         
         (( line_num = line_num + 1 ))
+        IFS=' '
     done
         
-        
-    
-        
-    
 fi
