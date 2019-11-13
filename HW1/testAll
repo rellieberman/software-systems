@@ -4,30 +4,45 @@
 
 DIR=$PWD
 
+: '
 if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
 else 
+'
+
     mkdir .logFiles
     (( line_num = 1 ))
-    (( test_num = 0 ))
+    (( failed_num = 0 ))
     (( success_num = 0 ))
     
-    while read line; do
+    while read line ; do
         IFS='@'
-        read -ra FIELDS <<< "$line"
+        line_split=($line)
+        IFS=' '
         
-        echo "${line_num}: ${FIELDS[0]}"
-        echo "logFiles/${line_num}.compile.log ${FIELDS[1]}"
+        : '
+        echo ${line_split[0]}
+        echo ${line_split[1]}
+        echo ${line_split[2]}
+        echo ${line_split[3]}
+        '
         
-        # ./testCompilation "logFiles/${line_num}.compile.log $FIELDS[1]"
-        printf "logFiles/${line_num}.inout.log" "${FIELDS[1]} ${FIELDS[2]} ${FIELDS[3]}"
-        #./testInOut "logFiles/${line_num}.inout.log" "$FIELDS[1]" "$FIELDS[2]" "$FIELDS[3]"
-        # ./testMemLeaks "logFiles/${line_num}.memory.log" "$FIELDS[1]" "$FIELDS[2]"
-        printf   "logFiles/${line_num}.memory.log" "${FIELDS[1]} ${FIELDS[2]}"
+        echo "${line_num}: ${line_split[0]}"
+        
+        ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}"
+        (( failed_num = $failed_num + $? ))
+        
+        ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}"
+         (( failed_num = $failed_num + $? ))
+         
+        ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}"
+        (( failed_num = $failed_num + $? ))
         
         (( line_num = line_num + 1 ))
-        IFS=' '
-    done
         
-fi
+
+    done < $1
+    
+    echo  $failed_num
+#fi

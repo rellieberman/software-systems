@@ -2,9 +2,9 @@
 
 # input is log, program to run,  input file, output file
 
-$2 < $3 > $1
+./$2 < $3 > $1
 
-if [ `diff -q $1 $4` = "" ]; then
+if [ "$(diff -q $1 $4)" = "" ]; then
     echo "Output files match"
     exit 0
 else
