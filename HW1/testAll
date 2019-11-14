@@ -12,7 +12,7 @@ else
 '
 
     mkdir .logFiles
-    (( line_num = 1 ))
+    (( line_num = 0 ))
     (( failed_num = 0 ))
     (( success_num = 0 ))
     
@@ -21,32 +21,48 @@ else
         line_split=($line)
         IFS=' '
         
-        : '
-        echo ${line_split[0]}
-        echo ${line_split[1]}
-        echo ${line_split[2]}
-        echo ${line_split[3]}
-        '
+        if [ "${line_split[1]}"  = "" ]; then
+            break
+        fi
+        
+        (( line_num = line_num + 1 ))
+        
         
         echo "${line_num}: ${line_split[0]}"
         
-        ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}"
-        (( failed_num = $failed_num + $? ))
+        ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}" > /dev/null
         
-        ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}"
-         (( failed_num = $failed_num + $? ))
+        if [ $? = "0" ]; then 
+            echo "Compile V"
+        else
+            echo "compile X"
+            (( failed_num = $failed_num + 1 ))
+        fi
+        
+        
+        ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}" > /dev/null
          
-        ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}"
-        (( failed_num = $failed_num + $? ))
+        if [ $? = "0" ]; then 
+            echo "InOut V"
+        else
+            echo "InOut X"
+            (( failed_num = $failed_num + 1 ))
+        fi
         
-        (( line_num = line_num + 1 ))
+         
+        ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}" > /dev/null
+        
+        if [ $? = "0" ]; then 
+            echo "Memory V"
+        else
+            echo "Memory X"
+            (( failed_num = $failed_num + 1 ))
+        fi
         
 
     done < $1
     
-    (( test_num = ($line_num - 1) * 3 ))
-    (( passed_num = $line_num - $failed_num ))
+    (( test_num = $line_num  * 3 ))
+    (( passed_num = $test_num - $failed_num ))
     echo  "passed ${passed_num} of ${test_num} tests" 
-
-    echo $test 
 #fi
