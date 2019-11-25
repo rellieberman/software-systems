@@ -4,12 +4,12 @@
 
 DIR=$PWD
 
-: '
+
 if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
 else 
-'
+
 
     mkdir .logFiles
     (( line_num = 0 ))
@@ -30,39 +30,18 @@ else
         
         echo "${line_num}: ${line_split[0]}"
         
-        ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}" > /dev/null
-        
-        if [ $? = "0" ]; then 
-            echo "Compile V"
-        else
-            echo "compile X"
-            (( failed_num = $failed_num + 1 ))
-        fi
+        ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}"
         
         
-        ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}" > /dev/null
-         
-        if [ $? = "0" ]; then 
-            echo "InOut V"
-        else
-            echo "InOut X"
-            (( failed_num = $failed_num + 1 ))
-        fi
+        ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}"
         
          
-        ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}" > /dev/null
+        ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}"
         
-        if [ $? = "0" ]; then 
-            echo "Memory V"
-        else
-            echo "Memory X"
-            (( failed_num = $failed_num + 1 ))
-        fi
         
-
     done < $1
     
     (( test_num = $line_num  * 3 ))
     (( passed_num = $test_num - $failed_num ))
     echo  "passed ${passed_num} of ${test_num} tests" 
-#fi
+fi
