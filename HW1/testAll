@@ -4,12 +4,12 @@
 
 DIR=$PWD
 
-: '
+ 
 if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
 else 
-'
+
 
     mkdir .logFiles
     (( line_num = 0 ))
@@ -65,4 +65,4 @@ else
     (( test_num = $line_num  * 3 ))
     (( passed_num = $test_num - $failed_num ))
     echo  "passed ${passed_num} of ${test_num} tests" 
-#fi
+fi
