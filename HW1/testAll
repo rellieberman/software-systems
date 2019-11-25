@@ -58,5 +58,5 @@ else
     
     (( test_num = $line_num  * 3 ))
     (( passed_num = $test_num - $failed_num ))
-    echo  "${passed_num} tests passed of ${test_num}" 
+    echo  "${passed_num} tests passed out of ${test_num}" 
 fi

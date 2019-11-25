@@ -13,7 +13,7 @@ gcc -g -Wall -o $2 ${2}.c 1> $1 2>> $1
 success=`grep -L -e "warning" -e "error" $1`
 
 if [ "$success" = "${1}" ]; then
-    echo "Compilation succeeded"
+    echo "Compile succeeded"
     exit 0
 else   
     echo "Compile failed"

@@ -15,7 +15,7 @@ if [ "$?" = "1" ]; then
     echo "Memory test failed"
     exit 1
 else
-    echo "Memory test passes"
+    echo "Memory test passed"
 fi
 
 
