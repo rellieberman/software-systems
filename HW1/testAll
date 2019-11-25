@@ -4,7 +4,11 @@
 
 DIR=$PWD
 
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> origin
 if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
