@@ -1,7 +1,15 @@
 #!/bin/bash
 
+#********************************************************************
+# script name: testAll
+# Descriptiuon: runs all tests in input and reports their resaults
+# Paramaters: $1 logfile, $2 fiel to compile
+# Return Value: 0 success 1 fail
+#********************************************************************
+
 gcc -g -Wall -o $2 ${2}.c 1> $1 2>> $1
 
+# search output for errors or warnings
 success=`grep -L -e "warning" -e "error" $1`
 
 if [ "$success" = "${1}" ]; then

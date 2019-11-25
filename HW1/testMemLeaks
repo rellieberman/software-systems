@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#********************************************************************
+# script name: testMemLeaks
+# Descriptiuon: runs valgrind to search for memory bugs in app
+# Paramaters: $1 logfile, $2 app to test, $3 input to run
+# Return Value: 0 no issues 1 memory issues
+#********************************************************************
+
 # input is logfile, program name, input file
 
 valgrind --tool=memcheck --error-exitcode=1 ./$2 <$3 2>$1 >/dev/null

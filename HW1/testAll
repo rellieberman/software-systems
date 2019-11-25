@@ -1,9 +1,18 @@
 #!/bin/bash
 
+
+#********************************************************************
+# script name: testAll
+# Descriptiuon: runs all tests in input and reports their resaults
+# Paramaters: $1 list of tests
+# Return Value: 0 success 1 fail
+#********************************************************************
+
 #parameter $1 list of tests
 
 DIR=$PWD
 
+# exit on exitance of output log files
 if [ -d "${DIR}/.logFiles" ]; then 
     echo ".logFiles dir exists, exiting"
     exit 1
@@ -15,11 +24,16 @@ else
     (( failed_num = 0 ))
     (( success_num = 0 ))
     
+    
+    # read input line by line running test on each line    
     while read line ; do
+    
+        # put info of test into array using @ as delimiter
         IFS='@'
         line_split=($line)
         IFS=' '
         
+        # make sure not to run a empty line
         if [ "${line_split[1]}"  = "" ]; then
             break
         fi
@@ -29,12 +43,9 @@ else
         
         echo "${line_num}: ${line_split[0]}"
         
+        # run tests
         ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}"
-        
-        
         ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}"
-        
-         
         ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}"
         
         

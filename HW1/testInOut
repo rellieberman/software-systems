@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#********************************************************************
+# script name: testInOUt
+# Descriptiuon: runs app with selected input and compars to wanted resualt
+# Paramaters: $1 output file, $2 app to test, $3 input file, $4 compare file
+# Return Value: 0 output match 1 output mismatch
+#********************************************************************
+
 # input is log, program to run,  input file, output file
 
 ./$2 < $3 > $1
