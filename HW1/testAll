@@ -43,10 +43,15 @@ else
         
         echo "${line_num}: ${line_split[0]}"
         
-        # run tests
+        # run tests and count faliurs
         ./testCompilation ".logFiles/${line_num}.compile.log" "${line_split[1]}"
+         (( failed_num = $failed_num + $? ))
+        
         ./testInOut ".logFiles/${line_num}.inout.log" "${line_split[1]}" "${line_split[2]}" "${line_split[3]}"
+        (( failed_num = $failed_num + $? ))
+        
         ./testMemLeaks ".logFiles/${line_num}.memory.log" "${line_split[1]}" "${line_split[2]}"
+        (( failed_num = $failed_num + $? ))
         
         
     done < $1
