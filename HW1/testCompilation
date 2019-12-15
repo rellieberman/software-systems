@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #********************************************************************
-# script name: testAll
-# Descriptiuon: runs all tests in input and reports their resaults
+# script name: testCompilation
+# Descriptiuon: compiles app and reports errors
 # Paramaters: $1 logfile, $2 fiel to compile
 # Return Value: 0 success 1 fail
 #********************************************************************
